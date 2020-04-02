@@ -10,11 +10,11 @@
     "ngrok": "ngrok http 3000",
     "share": "npx npm-run-all --parallel open:src ngrok",
     "build": "webpack --config ./webpack.config.js",
-    "buildw": "webpack-dev-server",
+
     "FIXFIX": "webpack --progress --profile --colors --display-error-details --display-cached",
 
     "startx": "npm run build:dev",
-    "build:dev": "tsc && webpack-dev-server --env dev --mode none",
+    "build:dev": "webpack-dev-server --env dev --mode none",
     "build:prod": "webpack --env prod --mode production"
   },
   "repository": {
