@@ -1,12 +1,15 @@
-import express from 'express';
-import path from 'path';
-import open from 'open';
+const express = require('express');
+const path = require('path');
+const webpack = require('webpack');
+const middleware = require('webpack-dev-middleware');
+const config = require('../webpack.config.js');
 
 const port = 3000;
 const app = express();
+const compiler = webpack(config);
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../src/index.html'));
+    res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
 });
 
 app.listen(port, function (err) {
@@ -17,3 +20,11 @@ app.listen(port, function (err) {
     }
 
 });
+
+app.use(middleware(compiler, {
+    noInfo: true, publicPath: config.output.publicPath, stats:    { colors: true }
+}));
+
+app.use(middleware(compiler));
+
+app.use(express.static(path.resolve(__dirname, 'dist')));
