@@ -18,10 +18,9 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, prod_Path),
-        // filename: '[name].[chunkhash].js'
         filename: 'index_bundle.js'
     },
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     devServer: {
         open: true,
     },
