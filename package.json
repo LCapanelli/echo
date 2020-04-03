@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prestart": "tsc && node buildScripts/startMessage.ts",
-    "start": "npm-run-all --parallel build:dev lint:watch",
+    "start": "npm-run-all --parallel build:dev lint:watch test:watch",
     "open:src": "tsc && node buildScripts/srcServer.ts",
     "ngrok": "ngrok http 3000",
     "share": "npx npm-run-all --parallel open:src ngrok",
@@ -14,7 +14,9 @@
     "build": "webpack --config ./webpack.config.js",
     "startx": "npm run build:dev",
     "build:dev": "webpack-dev-server --env dev --mode none",
-    "build:prod": "webpack --env prod --mode production"
+    "build:prod": "webpack --env prod --mode production",
+    "test": "mocha --reporter progress --require ./node_modules/babel-register ./buildScripts/testSetup.js \"src/**/*.test.js\"",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -43,6 +45,7 @@
     "babel-preset-latest": "6.24.1",
     "babel-register": "6.26.0",
     "chai": "4.2.0",
+    "chai-dom": "^1.8.2",
     "chalk": "3.0.0",
     "cheerio": "0.22.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -57,6 +60,7 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.0.4",
+    "jquery": "^3.4.1",
     "jsdom": "16.2.2",
     "json-schema-faker": "0.4.7",
     "json-server": "0.16.1",
@@ -78,6 +82,7 @@
     "ts-loader": "^6.2.2",
     "tslint": "^6.1.0",
     "typescript": "^3.6.5",
+    "typescript-register": "^1.1.0",
     "webpack": "4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "3.7.2",
