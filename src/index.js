@@ -2,11 +2,9 @@
 // const value = numeral(999).format('$0,0.00');
 // const dbConnect = require('../app/config/dbConnect');
 // console.log(`I would pay ${value} for this course!`); // eslint-disable-line no-console
-
 // setTimeout(dbConnect, 1000);
 // console.log(process.env.DB_PORT);
 //console.log(dbFullPath);
-
 // database connection
 // mongoose
 //     .connect(dbFullPath)
@@ -15,7 +13,6 @@
 // mongoose.connection.on("error", err => {
 //     console.log(`DB connection error: ${err.message}`);
 // });
-
 // MUDAR PARA BACKEND ou arquivo único de conexao
 // const db = require('../config/database');
 // // const mongoose = require('mongoose');

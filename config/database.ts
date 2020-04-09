@@ -3,12 +3,13 @@ require('dotenv').config();
 // import Env from 'dotenv';
 // require('dotenv').config({path: __dirname + '/.env'})// import Env from 'dotenv';
 // Env.config = ({ encoding: 'utf8', debug: process.env.DEBUG });
+
 module.exports = {
-    /*
-    |--------------------------------------------------------------------------
-    | Default Connection
-    |--------------------------------------------------------------------------
-    */
+  /*
+  |--------------------------------------------------------------------------
+  | Default Connection
+  |--------------------------------------------------------------------------
+  */
     // connection: Env.get('DB_CONNECTION', 'mongodb'),
     mongodb: {
         client: 'mongodb',
@@ -28,5 +29,5 @@ module.exports = {
             }
         }
     }
-};
+}
 // console.log(chalk.bgBlueBright("DOTENVTESTs " + process.env.DB_HOST));
