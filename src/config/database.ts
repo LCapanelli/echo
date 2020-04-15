@@ -30,4 +30,3 @@ module.exports = {
         }
     }
 }
-// console.log(chalk.bgBlueBright("DOTENVTESTs " + process.env.DB_HOST));

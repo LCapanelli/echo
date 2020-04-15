@@ -2,18 +2,18 @@
 // exports.files = {
 //   javascripts: {
 //     joinTo: {
-//       'vendor.js': /^(?!app)/, // Files that are not in `app` dir.
-//       // 'vendor.js': /^node_modules/, // Files that are not in `app` dir.
-//       'app.js': /^app/
+//       'vendor.js': /^(?!index)/, // Files that are not in `index` dir.
+//       // 'vendor.js': /^node_modules/, // Files that are not in `index` dir.
+//       'index.js': /^index/
 //     }
 //   },
-//   stylesheets: {joinTo: 'app.css'},
+//   stylesheets: {joinTo: 'index.css'},
 // };
 //
 // exports.modules = {
 //   modules: {
 //     autoRequire: {
-//       "app.js": ["app"],
+//       "index.js": ["index"],
 //     }
 //   },
 //   npm: {
@@ -43,9 +43,9 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: {
-        'vendor.js': /^(?!app)/, // Files that are not in `app` dir.
-        // 'vendor.js': /^node_modules/, // Files that are not in `app` dir.
-        'app.js': /^app/
+        'vendor.js': /^(?!index)/, // Files that are not in `index` dir.
+        // 'vendor.js': /^node_modules/, // Files that are not in `index` dir.
+        'app.js': /^index/
       }
 
       // To change the order of concatenation of files, explicitly mention here
@@ -57,7 +57,7 @@ exports.config = {
       // }
     },
     stylesheets: {
-      joinTo: "css/app.css",
+      joinTo: "css/index.css",
     },
     templates: {
       joinTo: "js/app.js"
@@ -88,7 +88,7 @@ exports.config = {
 
   modules: {
     autoRequire: {
-      "js/app.js": ["js/app"]
+      "js/app.js": ["js/index"]
     }
   },
 

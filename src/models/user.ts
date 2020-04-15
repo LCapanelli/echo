@@ -1,10 +1,10 @@
-import mongoose from 'mongoose';
+const mongooseUser = require ('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const secret = process.env.APP_KEY;
 
-const user = new mongoose.Schema({
+const user = new mongooseUser.Schema({
     username: {
         type: String,
         required: [true, "Username can't be blank"],
@@ -25,7 +25,8 @@ const user = new mongoose.Schema({
     dateBirth: Date,
     password: {
         type: String,
-        required: true
+        required: true,
+        minLength: 4
     },
     gender: String,
     isActive: Boolean,
@@ -43,13 +44,13 @@ user.methods.setPassword = function(password){
     };
 
 user.methods.validPassword = function(password) {
-    var hash = bcrypt.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+    const hash = bcrypt.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
     return this.hash === hash;
     };
 
 user.methods.generateJWT = function() {
-    var today = new Date();
-    var exp = new Date(today);
+    const today = new Date();
+    const exp = new Date(today);
     exp.setDate(today.getDate() + 60);
 
     return jwt.sign({
@@ -78,6 +79,6 @@ user.statics.findByLogin = async function (login) {
     return user;
 };
 
-const User = mongoose.model('User', user);
+const User = mongooseUser.model('User', user);
 
-export default User;
+module.exports = { User };
