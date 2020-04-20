@@ -22,7 +22,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-//    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["node_modules/@types"],
     "skipLibCheck": false
   },
   "include": ["src"]

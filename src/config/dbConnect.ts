@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const db = require('./database.ts');
-const dbPath = `mongodb+srv://`+ db.mongodb.connection.username + `:` + db.mongodb.connection.password + `@` + db.mongodb.connection.host;
+const dbPath = `mongodb+srv://`+ db.mongodb.connection.username + `:` + db.mongodb.connection.password + `@` + db.mongodb.connection.host + `/` + db.mongodb.connection.database;
 
 const chalkDb = require('chalk');
 

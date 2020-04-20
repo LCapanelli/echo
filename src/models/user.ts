@@ -1,10 +1,8 @@
 const mongooseUser = require ('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const secret = process.env.APP_KEY;
 
-const user = new mongooseUser.Schema({
+const UserSchema = new mongooseUser.Schema({
     username: {
         type: String,
         required: [true, "Username can't be blank"],
@@ -32,44 +30,21 @@ const user = new mongooseUser.Schema({
     isActive: Boolean,
     showNotifications: Boolean,
     image: String,
-    hash: String,
-    salt: String
+    hash: String
 }, {timestamps: true});
 
-user.plugin(uniqueValidator, {message: 'This user is already taken.'});
+UserSchema
+    .plugin(uniqueValidator, { message: 'This user is already taken.' });
 
-user.methods.setPassword = function(password){
-      this.salt = bcrypt.randomBytes(16).toString('hex');
-      this.hash = bcrypt.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+UserSchema.methods.validPassword = function(password) {
+    bcrypt
+        .compare(password, this.hash, function(err, result) {
+        return result;
+    });
     };
 
-user.methods.validPassword = function(password) {
-    const hash = bcrypt.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-    return this.hash === hash;
-    };
-
-user.methods.generateJWT = function() {
-    const today = new Date();
-    const exp = new Date(today);
-    exp.setDate(today.getDate() + 60);
-
-    return jwt.sign({
-        id: this._id,
-        username: this.username,
-        exp: new Date(exp.getTime() / 1000),
-        }, secret);
-    };
-
-user.methods.toAuthJSON = function(){
-    return {
-        username: this.username,
-        email: this.email,
-        token: this.generateJWT(),
-        image: this.image
-        };
-    };
-
-user.statics.findByLogin = async function (login) {
+UserSchema.statics
+    .findByLogin = async function (login) {
     let user = await this.findOne({
         username: login,
     });
@@ -79,6 +54,14 @@ user.statics.findByLogin = async function (login) {
     return user;
 };
 
-const User = mongooseUser.model('User', user);
+// UserSchema.methods
+//     .toAuthJSON = function(){
+//     return {
+//         username: this.username,
+//         email: this.email,
+//         token: this.generateJWT(),
+//         image: this.image
+//         };
+//     };
 
-module.exports = { User };
+module.exports = mongooseUser.model('User', UserSchema);

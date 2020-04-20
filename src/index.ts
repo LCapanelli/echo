@@ -6,43 +6,58 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const chalk = require('chalk');
 
-// const handlebars = require("handlebars");
+const handlebars = require("express-handlebars");
 
-// const indexRouter = require('../src/routes');
-// const usersRouter = require('routerUser');
+// const indexRouter = require('../src/routes/index.ts');
 
 const connectDbModule = require('../src/config/dbConnect.ts');
-const userSchema = require('../src/models/user.ts');
+const userSchema = require('./routes/users.ts');
 
 // APP ==================================================
-const index = express();
-const port = process.env.PORT || 3000;
+const app = express();
+const port = process.env.PORT;
 
-index.get("/", (req, res) => {
-  res.json({ message: 'ECHO API Working' });
-});
-// index.get('/', function (req, res) {
-//   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+
+// app.get("/", (req, res) => {
+//   res.json({ message: 'ECHO API Working' });
 // });
 
-const createUsers = async () => {
-    const user1 = new userSchema.User({
-        username: 'userTest', email: 'email@gmail.com', password: '888888'
-    });
+/**
+ * Router Middleware
+ * Router - /user/*
+ * Method - *
+ */
+app.use("/user", userSchema);
 
-    await user1.save();
-};
+// const createUsers = async () => {
+//     const user1 = new userSchema.User({
+//         username: 'userTest', email: 'email@gmail.com'
+//     });
+//     try {
+//         await user1.setPassword('909090');
+//     } catch (err) {
+//         console.log(err);   // eslint-disable-line
+//     } finally {
+//         await user1.save();
+//     }
+// };
 
 async function connectAsync() {
     function appListening() {
         return new Promise(resolve => {
                 resolve(
-                    index.listen(port, function (err) {
+                    app.listen(port, function (err) {
                         if (err) {
                             console.log(err);   // eslint-disable-line
                         } else {
                             console.log(chalk.greenBright(`APP ECHO: server started at ${port}`));  // eslint-disable-line
-                            createUsers();
+                            // createUsers();
                         }
                     })
                 );
@@ -56,37 +71,31 @@ connectAsync().then(r => console.log('-- connectAsync success --'));
 
 // ======================================================
 // view engine setup
-index.set('views', path.join(__dirname, 'views'));
-index.set('view engine', 'hbs');
+const viewsPath = path.join(__dirname, '..', 'views');
+app.set('views', viewsPath);
 
-//Sets handlebars configurations (we will go through them later on)
-// index.engine('hbs', handlebars({
-//   layoutsDir: __dirname + '/views/layouts',
-//   extname: 'hbs'
-// }));
-
-index.get('/', (req, res) => {
-//Serves the body of the page aka "main.handlebars" to the container //aka "index.handlebars"
-  res.render('main', {layout : 'index'});
+const hbs = handlebars.create({
+    defaultLayout: 'main',
+    layoutsDir: viewsPath + '/layouts',
+    partialsDir: viewsPath + '/partials',
+    extname: '.hbs'
 });
 
-index.use(logger('dev'));
-index.use(express.json());
-index.use(express.urlencoded({ extended: false }));
-index.use(cookieParser());
-index.use(bodyParser.json()); //converts data body to JSON
-index.use(express.static(path.join(__dirname, 'public')));
+app.engine('hbs', hbs.engine);
+app.set('view engine', 'hbs');
 
-// index.use('/', indexRouter);
-// index.use('/users', usersRouter);
+app.get('/', (req, res) => {
+//Serves the body of the page aka "main.hbs" to the container //aka "index.hbs"
+  res.render('main', { layout: 'index' });
+});
 
 // catch 404 and forward to error handler
-index.use(function(req, res, next) {
+app.use(function(req, res, next) {
   next(createError(404));
 });
 
 // error handler
-index.use(function(err, req, res, next) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -96,4 +105,4 @@ index.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = index;
+module.exports = app;
